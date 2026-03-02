@@ -51,8 +51,8 @@ export default function SATView() {
         </div>
       </div>
 
-      {/* Records table — shown when a batch is selected or after any successful import */}
-      {(selectedBatchId !== null || batches.some((b) => b.status === 'SUCCESS')) && (
+      {/* Records table — shown whenever there are batches (any status) so logs are always visible */}
+      {(selectedBatchId !== null || batches.length > 0) && (
         <div className="card border-0 shadow-sm">
           <div className="card-header bg-white border-bottom d-flex align-items-center justify-content-between py-3 px-4">
             <h6 className="fw-semibold mb-0">

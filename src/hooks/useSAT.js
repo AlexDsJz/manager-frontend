@@ -13,7 +13,9 @@ export function useTriggerImport() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: triggerImport,
-    onSuccess: () => {
+    // Use onSettled so the list always refreshes, whether the import
+    // succeeded or failed — the new batch (FAILED/SUCCESS) must appear.
+    onSettled: () => {
       qc.invalidateQueries({ queryKey: ['sat-batches'] })
       qc.invalidateQueries({ queryKey: ['sat-canceled'] })
     },
