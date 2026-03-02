@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+  frontend:
+    build:
+      context: .
+      args:
+        # Points to the backend service if running alongside manager-backend's compose
+        VITE_API_BASE_URL: http://localhost:8000
+    container_name: manager_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    # Optional: connect to the backend network when running both projects together
+    # networks:
+    #   - manager_network
+
+# To run the full stack together, use:
+#   docker-compose -f ../manager-backend/docker-compose.yml -f docker-compose.yml up --build
