@@ -1,6 +1,12 @@
 import { NavLink } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
+
+const navLinkClass = ({ isActive }) =>
+  `nav-link px-3 rounded ${isActive ? 'active bg-primary bg-opacity-25' : ''}`
 
 export default function Navbar() {
+  const { user, isAdmin, logout } = useAuth()
+
   return (
     <nav className="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
       <div className="container-fluid px-4">
@@ -27,37 +33,55 @@ export default function Navbar() {
         </button>
 
         <div className="collapse navbar-collapse" id="navbarMain">
-          <ul className="navbar-nav ms-auto gap-1">
-            <li className="nav-item">
-              <NavLink
-                to="/events"
-                className={({ isActive }) =>
-                  `nav-link px-3 rounded ${isActive ? 'active bg-primary bg-opacity-25' : ''}`
-                }
-              >
-                Eventos
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                to="/admin"
-                className={({ isActive }) =>
-                  `nav-link px-3 rounded ${isActive ? 'active bg-primary bg-opacity-25' : ''}`
-                }
-              >
-                Administrador
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                to="/sat"
-                className={({ isActive }) =>
-                  `nav-link px-3 rounded ${isActive ? 'active bg-primary bg-opacity-25' : ''}`
-                }
-              >
-                SAT Lista 69
-              </NavLink>
-            </li>
+          <ul className="navbar-nav ms-auto gap-1 align-items-md-center">
+
+            {/* Regular user → Eventos */}
+            {user && !isAdmin && (
+              <li className="nav-item">
+                <NavLink to="/events" className={navLinkClass}>
+                  Eventos
+                </NavLink>
+              </li>
+            )}
+
+            {/* Admin → Administrador */}
+            {user && isAdmin && (
+              <li className="nav-item">
+                <NavLink to="/admin" className={navLinkClass}>
+                  Administrador
+                </NavLink>
+              </li>
+            )}
+
+            {/* Both → SAT Lista 69 */}
+            {user && (
+              <li className="nav-item">
+                <NavLink to="/sat" className={navLinkClass}>
+                  SAT Lista 69
+                </NavLink>
+              </li>
+            )}
+
+            {/* User chip + logout */}
+            {user && (
+              <li className="nav-item d-flex align-items-center gap-2 ms-2">
+                <span className="badge bg-secondary bg-opacity-75 fw-normal">
+                  {user.username}
+                  {isAdmin && (
+                    <span className="ms-1 badge bg-warning text-dark" style={{ fontSize: '0.65rem' }}>
+                      admin
+                    </span>
+                  )}
+                </span>
+                <button
+                  className="btn btn-sm btn-outline-light py-0 px-2"
+                  onClick={logout}
+                  title="Cerrar sesión"
+                >
+                  Salir
+                </button>
+              </li>
+            )}
           </ul>
         </div>
       </div>
