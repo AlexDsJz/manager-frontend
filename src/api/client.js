@@ -6,7 +6,15 @@ const client = axios.create({
   timeout: 300_000, // 5 min — SAT import can be slow
 })
 
-// On 401, clear stored tokens and redirect to login
+// Set auth header synchronously at module load time so the header is
+// present on the very first request after a page refresh, before any
+// React useEffect has had a chance to run.
+const _token = localStorage.getItem('manager_access')
+if (_token) {
+  client.defaults.headers.common['Authorization'] = `Bearer ${_token}`
+}
+
+// On 401, clear tokens and redirect to login
 client.interceptors.response.use(
   (response) => response,
   (error) => {
