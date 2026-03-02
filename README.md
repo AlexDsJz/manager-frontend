@@ -82,11 +82,32 @@ manager-frontend/
 
 ### Prerequisites
 
-- Node 18+ (or 20 LTS)
 - Backend running at `http://localhost:8000`
   See [manager-backend](../manager-backend/README.md) for setup instructions.
 
-### Development
+---
+
+### Option A — Docker (recommended)
+
+No need to install Node locally. Dependencies run inside a container.
+
+```bash
+# Copy env file (only needed once)
+cp .env.example .env
+
+# Start dev server with hot-reload
+docker-compose -f docker-compose.dev.yml up
+```
+
+App opens at **http://localhost:3000**
+
+> Dependencies are installed inside the container via a named volume (`node_modules`), so your local machine stays clean and version conflicts are avoided.
+
+---
+
+### Option B — Local Node
+
+Requires Node 18+ (or 20 LTS) installed on your machine.
 
 ```bash
 # 1. Install dependencies
@@ -94,7 +115,6 @@ npm install
 
 # 2. Create environment file
 cp .env.example .env
-# Edit VITE_API_BASE_URL if your backend runs on a different port
 
 # 3. Start the dev server
 npm run dev
@@ -113,7 +133,7 @@ npm run preview  # preview the production build locally
 
 ---
 
-## Docker
+## Docker (production)
 
 ### Frontend only
 
